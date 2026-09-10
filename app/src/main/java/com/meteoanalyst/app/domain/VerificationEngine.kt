@@ -103,7 +103,7 @@ class VerificationEngine(
                 Log.w(TAG, "Bootstrap: нет факта за $date — пропуск", t)
                 continue
             }
-            val targetTime = date.atTime(OpenMeteoProvider.VERIFICATION_HOUR)
+            val targetTime = date.atTime(OpenMeteoProvider.VERIFICATION_HOUR, 0)
             for (provider in providers) {
                 val forecast = provider.reconstructForecast(actual, targetTime)
                 checks += newCheck(provider.id, date, forecast, actual)
@@ -145,7 +145,7 @@ class VerificationEngine(
     /** Фиксация прогнозов провайдеров на targetDate 15:00. */
     private suspend fun snapshotTarget(location: LocationInfo, targetDate: LocalDate) {
         val dateStr = targetDate.toString()
-        val targetTime = targetDate.atTime(OpenMeteoProvider.VERIFICATION_HOUR)
+        val targetTime = targetDate.atTime(OpenMeteoProvider.VERIFICATION_HOUR, 0)
         val snapshots = providers.mapNotNull { provider ->
             if (snapshotDao.find(provider.id, dateStr) != null) return@mapNotNull null
             val forecast = try {

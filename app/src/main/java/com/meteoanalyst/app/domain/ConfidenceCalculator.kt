@@ -15,7 +15,7 @@ object ConfidenceCalculator {
     const val DECAY_BASE = 0.92
 
     fun compute(avgRating: Float, hoursAhead: Float): Float =
-        (avgRating * DECAY_BASE.pow(hoursAhead / 24.0)).coerceIn(0f, 100f)
+        (avgRating * DECAY_BASE.pow(hoursAhead / 24.0)).toFloat().coerceIn(0f, 100f)
 
     fun averageRating(ratings: Collection<Float>): Float =
         if (ratings.isEmpty()) RatingCalculator.DEFAULT_RATING

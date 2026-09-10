@@ -16,7 +16,8 @@ object OpenMeteoMapper {
 
     fun toHourlySeries(response: OpenMeteoResponse): HourlySeries {
         val hourly = response.hourly
-        val times = hourly?.time.orEmpty()
+            ?: return HourlySeries(emptyList(), response.utcOffsetSeconds ?: 0, response.timezone ?: "UTC")
+        val times = hourly.time.orEmpty()
         val points = mutableListOf<WeatherPoint>()
         for (i in times.indices) {
             val stamp = times[i] ?: continue
@@ -57,7 +58,8 @@ object OpenMeteoMapper {
 
     fun toHistorical(response: OpenMeteoResponse, date: String): HistoricalData {
         val hourly = response.hourly
-        val times = hourly?.time.orEmpty()
+            ?: return HistoricalData(date, response.timezone ?: "UTC", response.utcOffsetSeconds ?: 0, emptyList())
+        val times = hourly.time.orEmpty()
         val hours = mutableListOf<HourActual>()
         for (i in times.indices) {
             val stamp = times[i] ?: continue
