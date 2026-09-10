@@ -1,0 +1,113 @@
+=== FAILED RUN:  ===
+--- test log (errors) ---
+38:> Task :app:compileDebugKotlin FAILED
+39:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:26:37 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+40:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:27:45 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+41:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:28:34 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+42:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:29:34 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+43:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:30:34 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+44:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:31:36 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+45:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:32:36 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+46:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:33:33 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+47:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:34:35 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+48:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:35:39 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+49:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:36:35 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+50:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:37:39 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+51:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:38:30 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+52:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:39:33 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+53:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:40:34 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+54:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:41:50 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+55:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:42:37 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+56:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:43:32 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+57:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:44:30 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+58:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:45:45 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+59:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:46:44 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+60:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:47:41 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+61:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:48:38 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+62:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:67:30 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+63:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:68:35 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+64:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:69:39 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+65:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:70:34 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+66:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:71:34 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+67:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/data/remote/OpenMeteoMapper.kt:72:37 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type HourlyDto?
+68:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/domain/ConfidenceCalculator.kt:18:9 Type mismatch: inferred type is Double but Float was expected
+69:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/domain/ConfidenceCalculator.kt:18:66 The floating-point literal does not conform to the expected type Double
+70:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/domain/ConfidenceCalculator.kt:18:70 The floating-point literal does not conform to the expected type Double
+71:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/domain/VerificationEngine.kt:106:35 None of the following functions can be called with the arguments supplied: 
+74:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/domain/VerificationEngine.kt:135:22 None of the following functions can be called with the arguments supplied: 
+77:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/domain/VerificationEngine.kt:148:37 None of the following functions can be called with the arguments supplied: 
+80:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/ui/components/ConfidenceCard.kt:33:39 Unresolved reference: FontWeight
+81:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/ui/components/ConfidenceCard.kt:100:26 Unresolved reference: FontWeight
+82:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/ui/components/HourlyForecast.kt:23:39 Unresolved reference: FontWeight
+83:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/ui/components/HourlyForecast.kt:68:13 None of the following functions can be called with the arguments supplied: 
+86:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/ui/components/HourlyForecast.kt:72:46 Unresolved reference: FontWeight
+87:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/ui/components/HourlyForecast.kt:72:67 Unresolved reference: FontWeight
+88:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/ui/main/MainScreen.kt:56:39 Unresolved reference: FontWeight
+89:e: file:///home/runner/work/NewPrognoz/NewPrognoz/app/src/main/java/com/meteoanalyst/app/ui/main/MainScreen.kt:340:30 Unresolved reference: FontWeight
+92:FAILURE: Build failed with an exception.
+138:Caused by: org.gradle.workers.internal.DefaultWorkerExecutor$WorkExecutionException: A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+264:Caused by: org.jetbrains.kotlin.gradle.tasks.CompilationErrorException: Compilation error. See log for more details
+298:BUILD FAILED in 1m 57s
+--- test log (tail) ---
+	at org.gradle.api.internal.tasks.execution.CatchExceptionTaskExecuter.execute(CatchExceptionTaskExecuter.java:36)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.executeTask(EventFiringTaskExecuter.java:77)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:55)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(EventFiringTaskExecuter.java:52)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:78)
+	at org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter.execute(EventFiringTaskExecuter.java:52)
+	at org.gradle.execution.plan.LocalTaskNodeExecutor.execute(LocalTaskNodeExecutor.java:42)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:331)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(DefaultTaskExecutionGraph.java:318)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.lambda$execute$0(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.internal.operations.CurrentBuildOperationRef.with(CurrentBuildOperationRef.java:80)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:314)
+	at org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(DefaultTaskExecutionGraph.java:303)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(DefaultPlanExecutor.java:463)
+	at org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run(DefaultPlanExecutor.java:380)
+	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
+Caused by: org.jetbrains.kotlin.gradle.tasks.CompilationErrorException: Compilation error. See log for more details
+	at org.jetbrains.kotlin.gradle.tasks.TasksUtilsKt.throwExceptionIfCompilationFailed(tasksUtils.kt:20)
+	at org.jetbrains.kotlin.compilerRunner.GradleKotlinCompilerWork.run(GradleKotlinCompilerWork.kt:141)
+	at org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction.execute(GradleCompilerRunnerWithWorkers.kt:73)
+	at org.gradle.workers.internal.DefaultWorkerServer.execute(DefaultWorkerServer.java:63)
+	at org.gradle.workers.internal.NoIsolationWorkerFactory$1$1.create(NoIsolationWorkerFactory.java:66)
+	at org.gradle.workers.internal.NoIsolationWorkerFactory$1$1.create(NoIsolationWorkerFactory.java:62)
+	at org.gradle.internal.classloader.ClassLoaderUtils.executeInClassloader(ClassLoaderUtils.java:100)
+	at org.gradle.workers.internal.NoIsolationWorkerFactory$1.lambda$execute$0(NoIsolationWorkerFactory.java:62)
+	at org.gradle.workers.internal.AbstractWorker$1.call(AbstractWorker.java:44)
+	at org.gradle.workers.internal.AbstractWorker$1.call(AbstractWorker.java:41)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:199)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:157)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.internal.operations.DefaultBuildOperationExecutor.call(DefaultBuildOperationExecutor.java:78)
+	at org.gradle.workers.internal.AbstractWorker.executeWrappedInBuildOperation(AbstractWorker.java:41)
+	at org.gradle.workers.internal.NoIsolationWorkerFactory$1.execute(NoIsolationWorkerFactory.java:59)
+	at org.gradle.workers.internal.DefaultWorkerExecutor.lambda$submitWork$0(DefaultWorkerExecutor.java:170)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.runExecution(DefaultConditionalExecutionQueue.java:187)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.access$700(DefaultConditionalExecutionQueue.java:120)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner$1.run(DefaultConditionalExecutionQueue.java:162)
+	at org.gradle.internal.Factories$1.create(Factories.java:31)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.withLocks(DefaultWorkerLeaseService.java:264)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:128)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:133)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.runBatch(DefaultConditionalExecutionQueue.java:157)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.run(DefaultConditionalExecutionQueue.java:126)
+	... 2 more
+
+
+BUILD FAILED in 1m 57s
+18 actionable tasks: 18 executed
+--- release log (errors) ---
+--- release log (tail) ---
