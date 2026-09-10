@@ -1,6 +1,5 @@
 package com.meteoanalyst.app.domain
 
-import com.meteoanalyst.app.data.model.EnsemblePoint
 import com.meteoanalyst.app.data.model.WeatherPoint
 
 /**
