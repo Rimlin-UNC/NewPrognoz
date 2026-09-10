@@ -132,7 +132,7 @@ class VerificationEngine(
                 Forecast(temp = it.temp, windSpeed = it.windSpeed, rainAmount = it.rainAmount)
             } ?: provider.reconstructForecast(
                 actual,
-                date.atTime(OpenMeteoProvider.VERIFICATION_HOUR)
+                date.atTime(OpenMeteoProvider.VERIFICATION_HOUR, 0)
             )
             val usedSnapshot = snapshot != null
             newCheck(provider.id, date, forecast, actual).also {

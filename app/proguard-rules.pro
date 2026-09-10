@@ -10,7 +10,7 @@
 -dontwarn kotlin.Unit
 -dontwarn retrofit2.KotlinExtensions
 -dontwarn retrofit2.KotlinExtensions$*
--if interface * { @retrofit2.http.* <***> get(...); }
+-if interface * { @retrofit2.http.* <methods>; }
 -keep,allowobfuscation interface <1>
 -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
 -keep,allowobfuscation,allowshrinking class retrofit2.Response
