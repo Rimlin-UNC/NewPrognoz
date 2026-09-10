@@ -1,6 +1,7 @@
 package com.meteoanalyst.app.ui.components
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -82,6 +83,7 @@ fun ConfidenceCard(
 }
 
 /** Крупный процент с анимацией обновления данных (ТЗ: плавность). */
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun AnimatedBigPercent(value: Float) {
     AnimatedContent(

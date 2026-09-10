@@ -38,7 +38,7 @@ class VerificationEngine(
     private val settings: AppSettings,
     private val providerDao: ProviderDao,
     private val checkDao: DailyCheckDao,
-    private val snapshotDao: ForecastSnapshotDao
+    private val snapshotDao: SnapshotDao
 ) {
 
     suspend fun runDailyVerification(now: ZonedDateTime = ZonedDateTime.now(MOSCOW)) {

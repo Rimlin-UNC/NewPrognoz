@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.meteoanalyst.app.R
 import com.meteoanalyst.app.data.WeatherRepository
 import com.meteoanalyst.app.data.local.AppSettings
-import com.meteoanalyst.app.data.model.DayForecast
 import com.meteoanalyst.app.data.model.EnsemblePoint
 import com.meteoanalyst.app.data.model.HourlySeries
 import com.meteoanalyst.app.data.model.LocationInfo

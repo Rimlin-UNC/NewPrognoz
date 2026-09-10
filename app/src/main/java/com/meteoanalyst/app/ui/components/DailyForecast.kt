@@ -119,22 +119,4 @@ private fun DailyRow(day: DayUi, weekMin: Float, weekMax: Float, isToday: Boolea
             style = MaterialTheme.typography.bodyLarge
         )
     }
-    androidx.compose.foundation.layout.Box(
-        Modifier
-            .fillMaxWidth()
-            .height(1.dp)
-    ) {}
 }
-
-@Composable
-private fun DayDivider() {
-    androidx.compose.foundation.layout.Box(
-        Modifier
-            .fillMaxWidth()
-            .height(1.dp)
-            .padding(horizontal = 0.dp)
-    )
-}
-
-@Suppress("unused")
-private val unusedSecondary = TextSecondary

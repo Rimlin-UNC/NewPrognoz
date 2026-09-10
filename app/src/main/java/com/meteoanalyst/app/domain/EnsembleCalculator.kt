@@ -26,14 +26,11 @@ object EnsembleCalculator {
         }
 
         fun avgNullable(selector: (WeatherPoint) -> Float?): Float? {
-            val present = points.withIndex().filter { selector(it.value) != null }
-            if (present.isEmpty()) return null
-            if (present.size == points.size) return avg(selector)
-            // Значение есть не у всех — усредняем по имеющимся с их весами
             var acc = 0f
             var w = 0f
-            for ((i, p) in present) {
-                acc += selector(p)!! * weights[i]
+            for (i in points.indices) {
+                val value = selector(points[i]) ?: continue
+                acc += value * weights[i]
                 w += weights[i]
             }
             return if (w > 0f) acc / w else null

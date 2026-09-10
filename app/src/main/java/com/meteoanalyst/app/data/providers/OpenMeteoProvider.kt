@@ -50,7 +50,7 @@ class OpenMeteoProvider(
         val target = LocalDate.parse(date)
         val daysBack = ChronoUnit.DAYS.between(target, LocalDate.now()).toInt()
         val response = if (daysBack in 0..FRESH_DAYS_LIMIT) {
-            client.forecast(lat, lon, pastDays = (daysBack + 2).coerceAtMost(92), forecastDays = 1)
+            client.forecast(lat, lon, pastDays = FRESH_HISTORY_COVER, forecastDays = 1)
         } else {
             client.archive(lat, lon, date)
         }

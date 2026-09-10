@@ -7,6 +7,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Unit tests + Release APK
@@ -16,7 +19,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
@@ -28,13 +31,17 @@ jobs:
         run: sdkmanager "platforms;android-34" "build-tools;34.0.0" >/dev/null
 
       - name: Set up Gradle (with cache)
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Unit tests (формулы скора, рейтинга, ансамбля, достоверности)
-        run: ./gradlew testDebugUnitTest --stacktrace
+        run: |
+          set -o pipefail
+          ./gradlew testDebugUnitTest --stacktrace 2>&1 | tee gradle-test.log
 
       - name: Assemble release APK
-        run: ./gradlew assembleRelease --stacktrace
+        run: |
+          set -o pipefail
+          ./gradlew assembleRelease --stacktrace 2>&1 | tee gradle-release.log
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
@@ -42,3 +49,25 @@ jobs:
           name: MeteoAnalyst-release-apk
           path: app/build/outputs/apk/release/*.apk
           if-no-files-found: error
+
+      # Логи недоступны через API из некоторых сред — публикуем выдержку
+      # ошибок коммитом в ветку (файл ci-last-errors.txt, [skip ci]).
+      - name: Publish failure log to branch
+        if: failure()
+        run: |
+          git config user.name "ci-bot"
+          git config user.email "ci@users.noreply.github.com"
+          {
+            echo "=== FAILED RUN: $GITHUB_RUN_URL ==="
+            echo "--- test log (errors) ---"
+            grep -nE "^e: |error:|FAILED|Caused by|FAILURE|BUILD " gradle-test.log | tail -150 || true
+            echo "--- test log (tail) ---"
+            tail -60 gradle-test.log || true
+            echo "--- release log (errors) ---"
+            grep -nE "^e: |error:|FAILED|Caused by|FAILURE|BUILD " gradle-release.log | tail -150 || true
+            echo "--- release log (tail) ---"
+            tail -60 gradle-release.log || true
+          } > ci-last-errors.txt
+          git add ci-last-errors.txt
+          git commit -m "CI: log excerpt [skip ci]" || exit 0
+          git push

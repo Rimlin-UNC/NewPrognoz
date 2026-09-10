@@ -29,8 +29,8 @@ class ConfidenceCalculatorTest {
 
     @Test
     fun `72 часа - как в ТЗ примерно 74 процента`() {
-        // 95 * 0.92^3 = 73.9
-        assertEquals(73.9f, ConfidenceCalculator.compute(95f, 72f), 0.05f)
+        // 95 * 0.92^3 = 73.975
+        assertEquals(73.975f, ConfidenceCalculator.compute(95f, 72f), 0.01f)
     }
 
     @Test

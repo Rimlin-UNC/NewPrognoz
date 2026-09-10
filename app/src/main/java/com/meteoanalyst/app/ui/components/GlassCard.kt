@@ -81,11 +81,8 @@ fun GlassDivider(modifier: Modifier = Modifier) {
     Box(
         modifier
             .padding(vertical = 10.dp)
+            .fillMaxWidth()
+            .height(1.dp)
             .background(Color.White.copy(alpha = 0.08f))
-            .heightLine()
     )
 }
-
-private fun Modifier.heightLine() = this.then(
-    Modifier.padding(0.dp)
-)
