@@ -23,9 +23,9 @@ data class ObservationEntity(
     val windGustMs: Float?,
     val precipMm: Float?,
     val pressureHpa: Float?,
-    val humidityPct: Float?,
-    val visibilityM: Float?,
-    val weatherCode: Int?,
+    val humidityPct: Float? = null,
+    val visibilityM: Float? = null,
+    val weatherCode: Int? = null,
     val syncStatus: Int = STATUS_PENDING,
     val rejectReason: String? = null,
     val createdAt: Long = System.currentTimeMillis()
