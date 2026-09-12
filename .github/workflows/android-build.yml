@@ -11,8 +11,51 @@ permissions:
   contents: write
 
 jobs:
+  server-tests:
+    name: Сервер (PHP): синтаксис, схема, e2e API
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Проверка синтаксиса PHP
+        run: |
+          find server -name '*.php' -print0 | xargs -0 -n1 php -l > /tmp/php-lint.log
+          echo "Проверено файлов: $(find server -name '*.php' | wc -l)"
+
+      - name: Схема БД: schema.mysql.sql актуален
+        run: |
+          cd server
+          php schema_dump.php > /tmp/schema-gen.sql
+          diff -u schema.mysql.sql /tmp/schema-gen.sql && echo "schema.mysql.sql соответствует Schema.php"
+
+      - name: e2e самотест API (SQLite + встроенный сервер)
+        run: |
+          cd server
+          WA_CONFIG=$(pwd)/tests/config.sqlite.php php -S 127.0.0.1:8099 -t htdocs &
+          SERVER_PID=$!
+          sleep 2
+          set +e
+          php tests/api_test.php
+          TEST_RC=$?
+          kill $SERVER_PID 2>/dev/null || true
+          set -e
+          exit $TEST_RC
+
+      - name: Публикация лога при ошибке
+        if: failure()
+        run: |
+          git config user.name "ci-bot"
+          git config user.email "ci@users.noreply.github.com"
+          {
+            echo "=== SERVER TESTS FAILED: $GITHUB_RUN_URL ==="
+          } > ci-server-errors.txt
+          git add ci-server-errors.txt
+          git commit -m "CI: server tests failed [skip ci]" || exit 0
+          git push
+
   build:
-    name: Unit tests + Release APK
+    name: Приложение: тесты + Release APK
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -33,7 +76,7 @@ jobs:
       - name: Set up Gradle (with cache)
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Unit tests (формулы скора, рейтинга, ансамбля, достоверности)
+      - name: Unit tests (формулы, профили, синхронизация)
         run: |
           set -o pipefail
           ./gradlew testDebugUnitTest --stacktrace 2>&1 | tee gradle-test.log

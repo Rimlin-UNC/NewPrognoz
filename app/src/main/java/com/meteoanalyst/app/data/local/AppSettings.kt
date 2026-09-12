@@ -3,6 +3,7 @@ package com.meteoanalyst.app.data.local
 import android.content.Context
 import android.content.SharedPreferences
 import com.meteoanalyst.app.data.model.LocationInfo
+import com.meteoanalyst.app.domain.ProProfile
 
 /**
  * Локальные настройки (SharedPreferences): выбранная локация,

@@ -13,9 +13,10 @@ import androidx.room.RoomDatabase
     entities = [
         ProviderEntity::class,
         DailyCheckEntity::class,
-        ForecastSnapshotEntity::class
+        ForecastSnapshotEntity::class,
+        ObservationEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -23,6 +24,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun providerDao(): ProviderDao
     abstract fun dailyCheckDao(): DailyCheckDao
     abstract fun snapshotDao(): SnapshotDao
+    abstract fun observationDao(): ObservationDao
 
     companion object {
         fun build(context: Context): AppDatabase =

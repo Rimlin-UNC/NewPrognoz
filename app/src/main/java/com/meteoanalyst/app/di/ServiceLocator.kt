@@ -38,6 +38,8 @@ object ServiceLocator {
         private set
     lateinit var locationController: LocationController
         private set
+    lateinit var syncEngine: com.meteoanalyst.app.domain.SyncEngine
+        private set
 
     fun init(context: Context) {
         if (initialized) return
@@ -77,7 +79,8 @@ object ServiceLocator {
                 repository = ServiceLocator.repository,
                 settings = ServiceLocator.settings,
                 locationController = ServiceLocator.locationController,
-                providersMeta = ServiceLocator.providers.map { Triple(it.id, it.name, it.color) }
+                providersMeta = ServiceLocator.providers.map { Triple(it.id, it.name, it.color) },
+                syncEngine = ServiceLocator.syncEngine
             )
         }
     }

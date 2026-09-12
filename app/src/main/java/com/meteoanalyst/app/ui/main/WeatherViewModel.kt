@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.meteoanalyst.app.R
 import com.meteoanalyst.app.data.WeatherRepository
 import com.meteoanalyst.app.data.local.AppSettings
+import com.meteoanalyst.app.data.local.ObservationEntity
 import com.meteoanalyst.app.data.model.EnsemblePoint
 import com.meteoanalyst.app.data.model.HourlySeries
 import com.meteoanalyst.app.data.model.LocationInfo
@@ -73,11 +74,16 @@ class WeatherViewModel(
     private var refreshJob: Job? = null
 
     init {
-        _state.value = _state.value.copy(showChangelogOnStart = !settings.changelogShown)
+        _state.value = _state.value.copy(
+            showChangelogOnStart = !settings.changelogShown,
+            profile = ProProfile.byCode(settings.profileCode),
+            sync = syncUiState()
+        )
 
         viewModelScope.launch {
             repository.seedProvidersIfEmpty()
             observeDatabase()
+            observeObservationQueue()
         }
         refresh(initial = true)
 
@@ -99,6 +105,95 @@ class WeatherViewModel(
     }
 
     val isPermissionAsked: Boolean get() = settings.locationPermissionAsked
+
+    // ------------------------------------------------ Weather Pro 2.0: профиль
+
+    fun selectProfile(profile: ProProfile) {
+        settings.profileCode = profile.code
+        _state.update { it.copy(profile = profile, criticalFlags = computeFlags(it, profile)) }
+    }
+
+    private fun computeFlags(state: UiState, profile: ProProfile): List<CriticalFlag> {
+        val points = state.hourly.map { it.point }
+        if (points.isEmpty()) return emptyList()
+        return ProfileRules.evaluateWindow(profile, points.take(12))
+    }
+
+    // ------------------------------------------- Weather Pro 2.0: наблюдения
+
+    /** Сохраняет наблюдение в локальную очередь (offline-first). */
+    fun reportObservation(
+        temp: Float?, wind: Float?, gust: Float?,
+        precip: Float?, pressure: Float?
+    ) {
+        val location = settings.location
+        viewModelScope.launch {
+            repository.insertObservation(
+                ObservationEntity(
+                    uuid = SyncEngine.newUuid(),
+                    lat = location.lat,
+                    lon = location.lon,
+                    observedAt = System.currentTimeMillis(),
+                    tempC = temp,
+                    windMs = wind,
+                    windGustMs = gust,
+                    precipMm = precip,
+                    pressureHpa = pressure
+                )
+            )
+            _state.update { it.copy(sync = syncUiState()) }
+        }
+    }
+
+    // ------------------------------------------- Weather Pro 2.0: синхронизация
+
+    fun registerOnServer(url: String, email: String, password: String) {
+        viewModelScope.launch {
+            _state.update { it.copy(sync = syncUiState().copy(isBusy = true)) }
+            val result = syncEngine.register(url, email, password)
+            _state.update {
+                it.copy(
+                    sync = syncUiState().copy(
+                        isBusy = false,
+                        lastMessage = result.fold(
+                            onSuccess = { "Подключено к $url" },
+                            onFailure = { e -> "Ошибка: ${e.message}" }
+                        )
+                    )
+                )
+            }
+        }
+    }
+
+    fun syncNow() {
+        viewModelScope.launch {
+            _state.update { it.copy(sync = syncUiState().copy(isBusy = true)) }
+            val result = syncEngine.syncNow()
+            val message = when {
+                !result.configured -> "Сервер не настроен"
+                result.error != null -> result.error
+                else -> "Синхронизировано: отправлено ${result.pushed}, " +
+                    "bias ${if (result.biasSamples > 0) "%+.2f°".format(result.biasTemp) else "нет"}"
+            }
+            _state.update { it.copy(sync = syncUiState().copy(isBusy = false, lastMessage = message)) }
+        }
+    }
+
+    private fun syncUiState(): SyncUiState = SyncUiState(
+        configured = syncEngine.isConfigured,
+        serverUrl = settings.serverUrl,
+        pendingCount = 0,
+        lastSyncAt = settings.lastSyncAt,
+        biasTemp = settings.serverBiasTemp,
+        biasWind = settings.serverBiasWind,
+        biasSamples = settings.serverBiasSamples
+    )
+
+    private suspend fun observeObservationQueue() {
+        repository.observePendingObservations().collect { count ->
+            _state.update { it.copy(sync = it.sync.copy(pendingCount = count)) }
+        }
+    }
 
     private fun refresh(initial: Boolean) {
         if (refreshJob?.isActive == true) return
@@ -201,15 +296,30 @@ class WeatherViewModel(
         val presentRatings = presentIds.map { ratings[it] ?: RatingCalculator.DEFAULT_RATING }
 
         // Ансамбль по часам
-        val ensemblePoints: List<WeatherPoint> = times.map { t ->
+        val rawEnsemble: List<WeatherPoint> = times.map { t ->
             val points = presentIds.mapNotNull { id -> byTime[id]?.get(t) }
             EnsembleCalculator.combine(points, presentRatings)
         }
 
+        // Bias-коррекция от сервера (агрегаты наблюдений сообщества)
+        val biasTemp = settings.serverBiasTemp
+        val biasWind = settings.serverBiasWind
+        val biasActive = settings.serverBiasSamples > 0 && (biasTemp != 0f || biasWind != 0f)
+        val ensemblePoints: List<WeatherPoint> = if (biasActive) {
+            rawEnsemble.map {
+                it.copy(
+                    temperature = it.temperature - biasTemp,
+                    apparentTemperature = it.apparentTemperature - biasTemp,
+                    windSpeed = (it.windSpeed - biasWind).coerceAtLeast(0f)
+                )
+            }
+        } else {
+            rawEnsemble
+        }
+
         val nowTime = times.getOrNull(nowIndex) ?: return
         val currentProviderPoints = presentIds.mapNotNull { byTime[it]?.get(nowTime) }
-        val currentEnsemble = ensemblePoints.getOrNull(nowIndex) ?: return
-        val (tempMin, tempMax) = EnsembleCalculator.tempRange(currentProviderPoints)
+        val currentEnsemble = ensemblePoints.getOrNull(nowIndex) ?: return        val (tempMin, tempMax) = EnsembleCalculator.tempRange(currentProviderPoints)
         val avg = ConfidenceCalculator.averageRating(presentRatings)
 
         val current = EnsemblePoint(
@@ -257,6 +367,7 @@ class WeatherViewModel(
             )
         }
 
+        val profile = ProProfile.byCode(settings.profileCode)
         _state.update {
             it.copy(
                 locationName = location.name,
@@ -266,7 +377,8 @@ class WeatherViewModel(
                 weekMin = daily.minOfOrNull { d -> d.minTemp } ?: 0f,
                 weekMax = daily.maxOfOrNull { d -> d.maxTemp } ?: 0f,
                 avgRating = avg,
-                error = null
+                error = null,
+                criticalFlags = ProfileRules.evaluateWindow(profile, hourly.map { h -> h.point }.take(12))
             )
         }
     }

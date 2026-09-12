@@ -34,6 +34,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -59,17 +60,22 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.meteoanalyst.app.data.model.EnsemblePoint
 import com.meteoanalyst.app.di.ServiceLocator
+import com.meteoanalyst.app.domain.ProProfile
 import com.meteoanalyst.app.domain.WeatherCodes
 import com.meteoanalyst.app.ui.about.AboutSheet
 import com.meteoanalyst.app.ui.components.AnimatedBackground
 import com.meteoanalyst.app.ui.components.ConfidenceCard
+import com.meteoanalyst.app.ui.components.CriticalConditionsCard
 import com.meteoanalyst.app.ui.components.DailyForecastList
 import com.meteoanalyst.app.ui.components.Formatters
 import com.meteoanalyst.app.ui.components.GlassCard
 import com.meteoanalyst.app.ui.components.HourlyForecastRow
+import com.meteoanalyst.app.ui.components.ProfileChipsRow
 import com.meteoanalyst.app.ui.components.ProviderRatingList
 import com.meteoanalyst.app.ui.components.RatingChart
+import com.meteoanalyst.app.ui.components.ReportObservationDialog
 import com.meteoanalyst.app.ui.components.StaggeredAppear
+import com.meteoanalyst.app.ui.components.SyncSettingsSheet
 import com.meteoanalyst.app.ui.components.WeatherIcon
 import com.meteoanalyst.app.ui.details.DetailsSheet
 import com.meteoanalyst.app.ui.theme.AccentCyan
@@ -92,6 +98,8 @@ fun MainScreen(
     val state by viewModel.state.collectAsState()
     var showDetails by remember { mutableStateOf(false) }
     var showAbout by remember { mutableStateOf(false) }
+    var showReport by remember { mutableStateOf(false) }
+    var showSync by remember { mutableStateOf(false) }
 
     // Разрешение на геолокацию при первом запуске (ТЗ п.10)
     val context = LocalContext.current
@@ -124,7 +132,14 @@ fun MainScreen(
                 locationName = state.locationName,
                 isRefreshing = state.isRefreshing,
                 onRefresh = { viewModel.refresh() },
-                onAbout = { showAbout = true }
+                onAbout = { showAbout = true },
+                onSync = { showSync = true }
+            )
+
+            // Профессиональный профиль (Weather Pro 2.0)
+            ProfileChipsRow(
+                selected = state.profile,
+                onSelect = { viewModel.selectProfile(it) }
             )
 
             when {
@@ -138,18 +153,35 @@ fun MainScreen(
                         StaggeredAppear(0) { CurrentWeatherBlock(current) }
                     }
 
-                    StaggeredAppear(1) {
+                    if (state.profile != ProProfile.UNIVERSAL || state.criticalFlags.isNotEmpty()) {
+                        StaggeredAppear(1) {
+                            CriticalConditionsCard(
+                                profile = state.profile,
+                                flags = state.criticalFlags,
+                                hoursWindow = 12
+                            )
+                        }
+                    }
+
+                    StaggeredAppear(2) {
+                        ReportButton(
+                            pendingCount = state.sync.pendingCount,
+                            onClick = { showReport = true }
+                        )
+                    }
+
+                    StaggeredAppear(3) {
                         ConfidenceCard(avgRating = state.avgRating)
                     }
 
                     SectionTitle("Почасовой прогноз")
-                    StaggeredAppear(2) {
+                    StaggeredAppear(4) {
                         HourlyForecastRow(hours = state.hourly, avgRating = state.avgRating)
                     }
 
                     if (state.daily.isNotEmpty()) {
                         SectionTitle("Прогноз на 7 дней")
-                        StaggeredAppear(3) {
+                        StaggeredAppear(5) {
                             GlassCard {
                                 DailyForecastList(
                                     days = state.daily,
@@ -160,19 +192,19 @@ fun MainScreen(
                         }
                     }
 
-                    StaggeredAppear(4) {
+                    StaggeredAppear(6) {
                         DetailsButton { showDetails = true }
                     }
 
                     SectionTitle("Точность провайдеров за 7 дней")
-                    StaggeredAppear(5) {
+                    StaggeredAppear(7) {
                         GlassCard {
                             RatingChart(chart = state.chart)
                         }
                     }
 
                     SectionTitle("Рейтинг источников")
-                    StaggeredAppear(6) {
+                    StaggeredAppear(8) {
                         GlassCard {
                             ProviderRatingList(providers = state.providers)
                             LastVerificationRow(state.lastCheckDate)
@@ -188,6 +220,25 @@ fun MainScreen(
     if (showDetails) {
         DetailsSheet(current = state.current, onDismiss = { showDetails = false })
     }
+    if (showReport) {
+        ReportObservationDialog(
+            onDismiss = { showReport = false },
+            onSave = { temp, wind, gust, precip, pressure ->
+                viewModel.reportObservation(temp, wind, gust, precip, pressure)
+                showReport = false
+            }
+        )
+    }
+    if (showSync) {
+        SyncSettingsSheet(
+            state = state.sync,
+            onRegister = { url, email, password ->
+                viewModel.registerOnServer(url, email, password)
+            },
+            onSyncNow = { viewModel.syncNow() },
+            onDismiss = { showSync = false }
+        )
+    }
     if (state.showChangelogOnStart) {
         AboutSheet(onDismiss = { viewModel.markChangelogShown() })
     } else if (showAbout) {
@@ -200,7 +251,8 @@ private fun HeaderRow(
     locationName: String,
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
-    onAbout: () -> Unit
+    onAbout: () -> Unit,
+    onSync: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -228,12 +280,55 @@ private fun HeaderRow(
                 tint = TextSecondary
             )
         }
+        IconButton(onClick = onSync) {
+            Icon(
+                Icons.Filled.Settings,
+                contentDescription = "Синхронизация",
+                tint = TextSecondary
+            )
+        }
         IconButton(onClick = onAbout) {
             Icon(
                 Icons.Filled.Info,
                 contentDescription = "О приложении",
                 tint = TextSecondary
             )
+        }
+    }
+}
+
+/** Кнопка «Сообщить погоду» с бейджем очереди (offline-first). */
+@Composable
+private fun ReportButton(pendingCount: Int, onClick: () -> Unit) {
+    val shape = RoundedCornerShape(18.dp)
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .border(0.5.dp, GlassStroke, shape)
+            .background(
+                Brush.horizontalGradient(
+                    listOf(Color(0x26FFFFFF), Color(0x14FFFFFF))
+                ),
+                shape
+            )
+            .clip(shape)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 10.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                "＋ Сообщить погоду",
+                style = MaterialTheme.typography.titleMedium
+            )
+            if (pendingCount > 0) {
+                Spacer(Modifier.width(10.dp))
+                Text(
+                    "в очереди: $pendingCount",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = AccentCyan
+                )
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ package com.meteoanalyst.app.data
 import com.meteoanalyst.app.data.local.AppSettings
 import com.meteoanalyst.app.data.local.AppDatabase
 import com.meteoanalyst.app.data.local.DailyCheckEntity
+import com.meteoanalyst.app.data.local.ObservationEntity
 import com.meteoanalyst.app.data.local.ProviderEntity
 import com.meteoanalyst.app.data.model.HourlySeries
 import com.meteoanalyst.app.data.model.LocationInfo

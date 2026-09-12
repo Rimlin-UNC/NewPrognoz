@@ -1,0 +1,33 @@
+# Weather Professional 2.0 — API
+# Маршрутизация всех запросов на index.php + базовая защита.
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Реальные файлы и каталоги отдаём напрямую
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Всё остальное — на фронт-контроллер
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# Запрет листинга каталогов
+Options -Indexes
+
+# Защита служебных файлов
+<FilesMatch "^\.|\.(bak|old|ini|log|sh|sql)$">
+    Require all denied
+</FilesMatch>
+
+# Заголовки безопасности
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "DENY"
+    Header always set Referrer-Policy "no-referrer"
+    Header always set X-XSS-Protection "0"
+</IfModule>
+
+# Тип JSON для удобства отладки корня
+DirectoryIndex index.php
