@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Метео-Аналитик</string>
+
+    <!-- Главный экран -->
+    <string name="ensemble_label">Ансамблевый прогноз</string>
+    <string name="sources_range">Источники</string>
+    <string name="confidence_title">Достоверность прогноза</string>
+    <string name="confidence_now">Сейчас</string>
+    <string name="hourly_title">Почасовой прогноз</string>
+    <string name="hour_now">Сейчас</string>
+    <string name="daily_title">На 7 дней</string>
+    <string name="details_button">Подробнее · 20+ параметров</string>
+    <string name="details_title">Подробные данные</string>
+    <string name="ratings_chart_title">Точность провайдеров за 7 дней</string>
+    <string name="providers_title">Рейтинг источников</string>
+    <string name="verification_title">Система самообучения</string>
+    <string name="refresh">Обновить</string>
+    <string name="about">О приложении</string>
+    <string name="loading">Загрузка…</string>
+    <string name="error_no_network">Не удалось загрузить прогноз. Проверьте подключение к интернету.</string>
+    <string name="retry">Повторить</string>
+    <string name="no_rating_data">Данные появятся после первой сверки с архивом</string>
+    <string name="last_verification">Последняя сверка</string>
+    <string name="never">ещё не проводилась</string>
+
+    <!-- О приложении / Changelog -->
+    <string name="about_title">О приложении</string>
+    <string name="changelog_title">Версия 2.0 «Метео-Аналитик»</string>
+    <string name="attribution">Данные: Open-Meteo.com (CC BY 4.0)</string>
+
+    <!-- Разделы экрана «Подробнее» -->
+    <string name="section_main">Основное</string>
+    <string name="section_wind">Ветер</string>
+    <string name="section_precipitation">Осадки</string>
+    <string name="section_atmosphere">Атмосфера</string>
+    <string name="section_soil">Почва и солнце</string>
+</resources>

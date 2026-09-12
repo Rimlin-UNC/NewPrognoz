@@ -1,0 +1,3 @@
+# Служебный каталог: доступ из веба запрещён.
+# (Если document root указывает на server/, а не на server/htdocs/)
+Require all denied

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Солнце + облако + капли дождя (центр безопасной зоны 108x108) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Солнце -->
+    <path
+        android:fillColor="#FFFFD54F"
+        android:pathData="M46,44 m-11,0 a11,11 0 1,1 22,0 a11,11 0 1,1 -22,0" />
+
+    <!-- Облако: две окружности + скруглённое основание -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M50,58 m-9,0 a9,9 0 1,1 18,0 a9,9 0 1,1 -18,0" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M64,56 m-11,0 a11,11 0 1,1 22,0 a11,11 0 1,1 -22,0" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M45,58 h24 a5,5 0 0,1 5,5 v0 a6,6 0 0,1 -6,6 h-22 a6,6 0 0,1 -6,-6 v0 a5,5 0 0,1 5,-5 z" />
+
+    <!-- Капли дождя -->
+    <path
+        android:fillColor="#FF6EE7FF"
+        android:pathData="M53,74 m-2.4,0 a2.4,2.4 0 1,1 4.8,0 a2.4,2.4 0 1,1 -4.8,0" />
+    <path
+        android:fillColor="#FF6EE7FF"
+        android:pathData="M62,78 m-2.4,0 a2.4,2.4 0 1,1 4.8,0 a2.4,2.4 0 1,1 -4.8,0" />
+</vector>
