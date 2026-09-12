@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   server-tests:
-    name: Сервер (PHP): синтаксис, схема, e2e API
+    name: "Сервер (PHP): синтаксис, схема, e2e API"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -23,7 +23,7 @@ jobs:
           find server -name '*.php' -print0 | xargs -0 -n1 php -l > /tmp/php-lint.log
           echo "Проверено файлов: $(find server -name '*.php' | wc -l)"
 
-      - name: Схема БД: schema.mysql.sql актуален
+      - name: "Схема БД: schema.mysql.sql актуален"
         run: |
           cd server
           php schema_dump.php > /tmp/schema-gen.sql
@@ -55,7 +55,7 @@ jobs:
           git push
 
   build:
-    name: Приложение: тесты + Release APK
+    name: "Приложение: тесты + Release APK"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
