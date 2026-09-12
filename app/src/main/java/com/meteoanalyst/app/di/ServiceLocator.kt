@@ -11,6 +11,7 @@ import com.meteoanalyst.app.data.local.AppDatabase
 import com.meteoanalyst.app.data.providers.ProviderFactory
 import com.meteoanalyst.app.data.providers.OpenMeteoProvider
 import com.meteoanalyst.app.data.remote.OpenMeteoClient
+import com.meteoanalyst.app.domain.SyncEngine
 import com.meteoanalyst.app.domain.VerificationEngine
 import com.meteoanalyst.app.location.LocationController
 import com.meteoanalyst.app.ui.main.WeatherViewModel
@@ -38,7 +39,7 @@ object ServiceLocator {
         private set
     lateinit var locationController: LocationController
         private set
-    lateinit var syncEngine: com.meteoanalyst.app.domain.SyncEngine
+    lateinit var syncEngine: SyncEngine
         private set
 
     fun init(context: Context) {
@@ -65,6 +66,7 @@ object ServiceLocator {
                 verificationEngine = verificationEngine
             )
             locationController = LocationController(app, settings)
+            syncEngine = SyncEngine(settings = settings, database = database)
             initialized = true
         }
     }

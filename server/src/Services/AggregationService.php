@@ -156,7 +156,7 @@ final class AggregationService {
             }
         }
 
-        [$upsert, $fixed] = self::upsertStmt($pdo, 'cell_hour', '');
+        [$upsert, $fixed] = self::upsertStmt($pdo, 'cell_hour');
         $count = 0;
         foreach ($groups as $g) {
             $payload = ['n' => 0];
@@ -173,8 +173,10 @@ final class AggregationService {
             if ($payload['n'] === 0) {
                 continue;
             }
+            // Порядок параметров = порядок колонок: kind, cell_lat, cell_lon,
+            // hour_bucket, source_code, payload_json, sample_size, computed_at
             $upsert->execute(array_merge($fixed, [
-                (float) $g['cell'][0], (float) $g['cell'][1], $g['hour'],
+                (float) $g['cell'][0], (float) $g['cell'][1], $g['hour'], '',
                 json_encode($payload, JSON_UNESCAPED_UNICODE), $payload['n'], wa_db_now(),
             ]));
             $count++;
@@ -247,12 +249,14 @@ final class AggregationService {
             $newWind = $old['wind_ms'] * (1 - self::EMA_ALPHA) + $meanWind * self::EMA_ALPHA;
             $n = $old['n'] + count($tempErrors);
 
-            [$upsert, $fixed] = self::upsertStmt($pdo, 'bias', $code);
-            $upsert->execute(array_merge($fixed, [0.0, 0.0, gmdate('Y-m-d H:i:s', 0),
+            [$upsert, $fixed] = self::upsertStmt($pdo, 'bias');
+            $upsert->execute(array_merge($fixed, [
+                0.0, 0.0, gmdate('Y-m-d H:i:s', 0), $code,
                 json_encode([
                     'temp_c' => round($newTemp, 2), 'wind_ms' => round($newWind, 2),
                     'mae_temp' => round($maeTemp, 2), 'n' => $n,
-                ], JSON_UNESCAPED_UNICODE), $n, wa_db_now()]));
+                ], JSON_UNESCAPED_UNICODE), $n, wa_db_now(),
+            ]));
             $biasRows++;
         }
         return ['pairs' => $pairs, 'bias_rows' => $biasRows];
@@ -281,8 +285,8 @@ final class AggregationService {
         return sprintf('%.1f|%.1f', round($lat / self::CELL) * self::CELL, round($lon / self::CELL) * self::CELL);
     }
 
-    /** @return array{0:\PDOStatement, 1:array} statement + фиксированные параметры */
-    private static function upsertStmt(\PDO $pdo, string $kind, string $sourceCode): array {
+    /** @return array{0:\PDOStatement, 1:array} statement + фиксированные параметры (kind) */
+    private static function upsertStmt(\PDO $pdo, string $kind): array {
         $sql = Db::driver() === 'mysql'
             ? "INSERT INTO aggregates (kind, cell_lat, cell_lon, hour_bucket, source_code, payload_json, sample_size, computed_at)
                VALUES (?,?,?,?,?,?,?,?)
@@ -291,8 +295,7 @@ final class AggregationService {
                VALUES (?,?,?,?,?,?,?,?)
                ON CONFLICT(kind, cell_lat, cell_lon, hour_bucket, source_code) DO UPDATE SET
                  payload_json = excluded.payload_json, sample_size = excluded.sample_size, computed_at = excluded.computed_at";
-        $stmt = $pdo->prepare($sql);
-        return [$pdo->prepare($sql), [$kind, $sourceCode]];
+        return [$pdo->prepare($sql), [$kind]];
     }
 
     public static function median(array $sortedValues): float {

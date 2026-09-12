@@ -82,7 +82,7 @@ CREATE TABLE `observations` (
   `updated_at` DATETIME NOT NULL,
   `deleted_at` DATETIME NULL,
   UNIQUE KEY `uq_obs_uuid` (`uuid`),
-  KEY `ix_obs_geo_time` (`lat`, `lon`, `observed_at`),
+  KEY `ix_obs_geo_time` (`lat`,`lon`,`observed_at`),
   KEY `ix_obs_quality` (`quality`),
   KEY `ix_obs_device` (`device_hash`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -117,7 +117,7 @@ CREATE TABLE `forecasts` (
   `cloud_pct` DECIMAL(5,1) NULL,
   `weather_code` INT NULL,
   `created_at` DATETIME NOT NULL,
-  KEY `ix_fc_lookup` (`source_id`, `lat`, `lon`, `target_time`),
+  KEY `ix_fc_lookup` (`source_id`,`lat`,`lon`,`target_time`),
   KEY `ix_fc_issued` (`issued_at`),
   KEY `ix_fc_target` (`target_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -132,7 +132,7 @@ CREATE TABLE `sync_queue` (
   `error` VARCHAR(255) NULL,
   `received_at` DATETIME NOT NULL,
   UNIQUE KEY `uq_syncq_op` (`op_uuid`),
-  KEY `ix_syncq_status` (`status`, `received_at`)
+  KEY `ix_syncq_status` (`status`,`received_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `sync_log` (
@@ -171,7 +171,7 @@ CREATE TABLE `model_runs` (
   `started_at` DATETIME NOT NULL,
   `finished_at` DATETIME NULL,
   `error` VARCHAR(255) NULL,
-  KEY `ix_runs_source` (`source_id`, `run_time`)
+  KEY `ix_runs_source` (`source_id`,`run_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `aggregates` (
@@ -184,8 +184,8 @@ CREATE TABLE `aggregates` (
   `payload_json` TEXT NOT NULL,
   `sample_size` INT NOT NULL DEFAULT 0,
   `computed_at` DATETIME NOT NULL,
-  UNIQUE KEY `uq_agg` (`kind`, `cell_lat`, `cell_lon`, `hour_bucket`, `source_code`),
-  KEY `ix_agg_kind_time` (`kind`, `computed_at`)
+  UNIQUE KEY `uq_agg` (`kind`,`cell_lat`,`cell_lon`,`hour_bucket`,`source_code`),
+  KEY `ix_agg_kind_time` (`kind`,`computed_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `audit_log` (

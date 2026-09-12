@@ -72,9 +72,9 @@ echo "base: $base\n\n";
 
 // ---------------------------------------------------------------- install
 echo "[setup] установка схемы в SQLite\n";
-@unlink($root . '/data/test.sqlite');
+@unlink(__DIR__ . '/data/test.sqlite');   // путь совпадает с tests/config.sqlite.php
 $result = WA\Schema::install(WA\Db::pdo());
-check('схема создана', count($result['created']) >= 14, 'таблиц: ' . count($result['created']));
+check('схема создана', count($result) >= 14, 'таблиц: ' . count($result));
 // админ из тестового конфига
 $email = 'admin@test.local';
 $password = 'admin-password-123';

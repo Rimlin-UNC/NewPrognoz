@@ -53,6 +53,16 @@ class WeatherRepository(
 
     suspend fun seedProvidersIfEmpty() = verificationEngine.seedProvidersIfEmpty()
 
+    // ------------------------------------------------- Weather Pro 2.0
+
+    /** Сохраняет наблюдение пользователя в очередь на отправку (offline-first). */
+    suspend fun insertObservation(observation: ObservationEntity) =
+        database.observationDao().insert(observation)
+
+    /** Реактивный счётчик наблюдений, ждущих отправки. */
+    fun observePendingObservations(): Flow<Int> =
+        database.observationDao().observePendingCount()
+
     suspend fun ensureSnapshotsForTomorrow(location: LocationInfo) =
         verificationEngine.ensureSnapshotsForTomorrow(location)
 

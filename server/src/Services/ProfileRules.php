@@ -34,7 +34,7 @@ final class ProfileRules {
                 if ($rainy) $add('precip', 'critical', 'Осадки — монтажные работы со мембранами/мастиками запрещены');
                 if ($thunder) $add('thunder', 'critical', 'Гроза — покинуть крышу');
                 if ($freezing && $rainy) $add('ice', 'critical', 'Гололёд — риск падения');
-                if ($temp !== null && $temp >= 30.0) $add('heat', 'warn', "Жара {$temp}°C — перерывы,hydration");
+                if ($temp !== null && $temp >= 30.0) $add('heat', 'warn', "Жара {$temp}°C — перерывы, питьевой режим");
                 break;
 
             case 'builder': // строитель

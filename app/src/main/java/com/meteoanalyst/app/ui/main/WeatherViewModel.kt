@@ -13,13 +13,18 @@ import com.meteoanalyst.app.data.model.LocationInfo
 import com.meteoanalyst.app.data.model.ProviderRating
 import com.meteoanalyst.app.data.model.WeatherPoint
 import com.meteoanalyst.app.domain.ConfidenceCalculator
+import com.meteoanalyst.app.domain.CriticalFlag
 import com.meteoanalyst.app.domain.EnsembleCalculator
+import com.meteoanalyst.app.domain.ProProfile
+import com.meteoanalyst.app.domain.ProfileRules
 import com.meteoanalyst.app.domain.RatingCalculator
+import com.meteoanalyst.app.domain.SyncEngine
 import com.meteoanalyst.app.location.LocationController
 import com.meteoanalyst.app.ui.components.ChartSeriesUi
 import com.meteoanalyst.app.ui.components.ChartUi
 import com.meteoanalyst.app.ui.components.DayUi
 import com.meteoanalyst.app.ui.components.HourUi
+import com.meteoanalyst.app.ui.components.SyncUiState
 import com.meteoanalyst.app.work.WorkScheduler
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -47,7 +52,8 @@ class WeatherViewModel(
     private val repository: WeatherRepository,
     private val settings: AppSettings,
     private val locationController: LocationController,
-    private val providersMeta: List<Triple<String, String, Long>>
+    private val providersMeta: List<Triple<String, String, Long>>,
+    private val syncEngine: SyncEngine
 ) : AndroidViewModel(application) {
 
     data class UiState(
@@ -64,7 +70,11 @@ class WeatherViewModel(
         val providers: List<ProviderRating> = emptyList(),
         val chart: ChartUi = ChartUi(emptyList(), emptyList()),
         val lastCheckDate: String? = null,
-        val showChangelogOnStart: Boolean = false
+        val showChangelogOnStart: Boolean = false,
+        // Weather Pro 2.0
+        val profile: ProProfile = ProProfile.UNIVERSAL,
+        val criticalFlags: List<CriticalFlag> = emptyList(),
+        val sync: SyncUiState = SyncUiState()
     )
 
     private val _state = MutableStateFlow(UiState())
@@ -319,7 +329,8 @@ class WeatherViewModel(
 
         val nowTime = times.getOrNull(nowIndex) ?: return
         val currentProviderPoints = presentIds.mapNotNull { byTime[it]?.get(nowTime) }
-        val currentEnsemble = ensemblePoints.getOrNull(nowIndex) ?: return        val (tempMin, tempMax) = EnsembleCalculator.tempRange(currentProviderPoints)
+        val currentEnsemble = ensemblePoints.getOrNull(nowIndex) ?: return
+        val (tempMin, tempMax) = EnsembleCalculator.tempRange(currentProviderPoints)
         val avg = ConfidenceCalculator.averageRating(presentRatings)
 
         val current = EnsemblePoint(

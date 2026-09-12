@@ -20,28 +20,33 @@ jobs:
 
       - name: Проверка синтаксиса PHP
         run: |
-          find server -name '*.php' -print0 | xargs -0 -n1 php -l > /tmp/php-lint.log
+          set -o pipefail
+          find server -name '*.php' -print0 | xargs -0 -n1 php -l 2>&1 | tee /tmp/php-lint.log
           echo "Проверено файлов: $(find server -name '*.php' | wc -l)"
 
       - name: "Схема БД: schema.mysql.sql актуален"
         run: |
+          set -o pipefail
           cd server
-          php schema_dump.php > /tmp/schema-gen.sql
-          diff -u schema.mysql.sql /tmp/schema-gen.sql && echo "schema.mysql.sql соответствует Schema.php"
+          php schema_dump.php > /tmp/schema-gen.sql 2>/tmp/schema-gen.err
+          diff -u schema.mysql.sql /tmp/schema-gen.sql | tee /tmp/schema.diff
+          echo "schema.mysql.sql соответствует Schema.php"
 
       - name: e2e самотест API (SQLite + встроенный сервер)
         run: |
           cd server
-          WA_CONFIG=$(pwd)/tests/config.sqlite.php php -S 127.0.0.1:8099 -t htdocs &
+          WA_CONFIG=$(pwd)/tests/config.sqlite.php php -S 127.0.0.1:8099 -t htdocs tests/router.php &
           SERVER_PID=$!
           sleep 2
           set +e
-          php tests/api_test.php
-          TEST_RC=$?
+          php tests/api_test.php 2>&1 | tee /tmp/e2e.log
+          TEST_RC=${PIPESTATUS[0]}
           kill $SERVER_PID 2>/dev/null || true
           set -e
           exit $TEST_RC
 
+      # Логи недоступны через API из некоторых сред — публикуем выдержку
+      # ошибок коммитом в ветку (файл ci-server-errors.txt, [skip ci]).
       - name: Публикация лога при ошибке
         if: failure()
         run: |
@@ -49,10 +54,24 @@ jobs:
           git config user.email "ci@users.noreply.github.com"
           {
             echo "=== SERVER TESTS FAILED: $GITHUB_RUN_URL ==="
+            for f in /tmp/php-lint.log /tmp/schema-gen.err /tmp/schema.diff /tmp/e2e.log; do
+              if [ -s "$f" ]; then
+                echo "--- $f ---"
+                tail -n 120 "$f"
+              fi
+            done
           } > ci-server-errors.txt
           git add ci-server-errors.txt
           git commit -m "CI: server tests failed [skip ci]" || exit 0
-          git push
+          BRANCH=$(git branch --show-current)
+          if [ -z "$BRANCH" ]; then echo "detached HEAD — публикация только в push-сборках"; exit 0; fi
+          for i in 1 2 3; do
+            git push origin "HEAD:$BRANCH" && exit 0
+            git fetch origin "$BRANCH"
+            git rebase "origin/$BRANCH" || { git rebase --abort; exit 0; }
+            sleep 3
+          done
+          exit 0
 
   build:
     name: "Приложение: тесты + Release APK"
@@ -113,4 +132,12 @@ jobs:
           } > ci-last-errors.txt
           git add ci-last-errors.txt
           git commit -m "CI: log excerpt [skip ci]" || exit 0
-          git push
+          BRANCH=$(git branch --show-current)
+          if [ -z "$BRANCH" ]; then echo "detached HEAD — публикация только в push-сборках"; exit 0; fi
+          for i in 1 2 3; do
+            git push origin "HEAD:$BRANCH" && exit 0
+            git fetch origin "$BRANCH"
+            git rebase "origin/$BRANCH" || { git rebase --abort; exit 0; }
+            sleep 3
+          done
+          exit 0

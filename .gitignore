@@ -35,4 +35,5 @@ google-services.json
 
 # Сервер: локальные данные SQLite (тесты) и конфиг с секретами
 server/data/
+server/tests/data/
 server/config.php
